@@ -1,4 +1,3 @@
-// pages/facilities.tsx
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { Facility } from "../types";
@@ -26,9 +25,16 @@ export default function FacilitiesPage() {
         if (data) {
           setFacilities(data);
         }
-      } catch (err: any) {
+      } catch (err) {
+        // Use a more specific error type
+        const errorMessage = err instanceof Error 
+          ? err.message 
+          : typeof err === 'string' 
+            ? err 
+            : "Failed to fetch facilities.";
+        
         console.error("Error fetching facilities:", err);
-        setError(err.message || "Failed to fetch facilities.");
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

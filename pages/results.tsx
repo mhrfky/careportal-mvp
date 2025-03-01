@@ -52,7 +52,7 @@ export default function Results() {
   };
 
   const getFacilityType = (facility: Facility) => {
-    const types = [];
+    const types : string[] = [];
     if (facility.stationary) types.push('Stationary');
     if (facility.ambulatory) types.push('Ambulatory');
     if (facility.daycare) types.push('Day Care');
