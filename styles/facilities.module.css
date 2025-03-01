@@ -1,0 +1,72 @@
+/* styles/facilities.module.css */
+
+.container {
+    min-height: 100vh;
+    padding: 2rem;
+  }
+  
+  .heading {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .loadingText,
+  .emptyText {
+    color: #6b7280; /* text-gray-500 */
+  }
+  
+  .errorText {
+    color: #ef4444; /* text-red-500 */
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+    background-color: black;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  }
+  
+  .cardTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .infoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .label {
+    font-weight: 500;
+  }
+  
+  .available {
+    color: #16a34a; /* text-green-600 */
+  }
+  
+  .full {
+    color: #dc2626; /* text-red-600 */
+  }
+  
+  /* Media queries for responsive grid */
+  @media (min-width: 768px) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
