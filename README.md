@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CarePortal
 
-## Getting Started
+CarePortal is a Next.js TypeScript application built as an interview project that demonstrates a simple patient-facility matching system.
 
-First, run the development server:
+## Project Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This interview project showcases:
+- Next.js with TypeScript implementation
+- Multi-step form handling
+- Context API for state management
+- Integration with Supabase for data storage
+
+## Project Structure
+
+```
+careportal/
+├── components/         # Reusable UI components
+├── contexts/           # React context providers
+├── lib/                # External service connections
+├── pages/              # Application routes
+├── services/           # Business logic
+├── styles/             # CSS styles
+└── types/              # TypeScript type definitions
+
+## Application Flow
+
+1. **Homepage** (`/`): Introduction screen with navigation
+2. **Patient Information** (`/patient-name`): Collects patient name
+3. **Care Selection** (`/care-selection`): Collects care type and zip code
+4. **Results** (`/results`): Displays matched facility based on inputs
+
+## Data Models
+
+### Facility Model
+
+```typescript
+interface Facility {
+  facility: string;       // Facility name
+  stationary: boolean;    // Offers stationary care
+  ambulatory: boolean;    // Offers ambulatory care
+  daycare: boolean;       // Offers day care
+  zip_code_min: number;   // Lower bound of service area
+  zip_code_max: number;   // Upper bound of service area
+  zip_code: number;       // Facility location
+  capacity: boolean;      // Has capacity for new patients
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Design Decision: Boolean Fields for Care Types
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+I used boolean fields (stationary, ambulatory, daycare) instead of an enum or lookup table for several reasons:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Query Performance**: Boolean fields allow for efficient filtering and indexing, especially as data grows
+2. **Schema Flexibility**: New care types can be added as columns without breaking existing queries
+3. **Multiple Care Types**: A facility can offer multiple care types simultaneously, which is easily represented with boolean flags
+4. **Simplified Queries**: Using boolean fields simplifies WHERE clauses (e.g., `WHERE stationary = true`)
+5. **Clear Data Model**: The approach makes it immediately clear what service capabilities each facility has
 
-## Learn More
+This design is particularly efficient for Supabase/PostgreSQL which can leverage bitmap indexes on boolean columns for fast filtering operations.
 
-To learn more about Next.js, take a look at the following resources:
+## Building and Running the Project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Prerequisites
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Node.js 14+ and npm
+- Supabase account (free tier is sufficient)
 
-## Deploy on Vercel
+### Environment Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Create a `.env.local` file in the project root:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+### Database Setup
+
+In your Supabase dashboard:
+
+1. Create a `facilities` table with the schema matching the Facility interface above
+2. Add test data to the facilities table
+
+### Installation and Development
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/careportal.git
+cd careportal
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+
+# Create production build
+npm run build
+
+# Start production server
+npm start
+```
+
+Visit `http://localhost:3000` to see the application.
+
+## Routes
+
+| Route | Purpose | Access | Description |
+|-------|---------|--------|-------------|
+| `/` | Homepage | Public | Introduction screen |
+| `/patient-name` | Patient Info | Public | Collects patient name |
+| `/care-selection` | Care Type | Public, requires patient name | Collects care type and zip code |
+| `/results` | Results | Public, requires prior steps | Displays matched facility |
+| `/facilities` | Facilities List | Public | Overview of facilities |
+
+## Notes
+
+This is an interview project created for demonstration purposes only.
